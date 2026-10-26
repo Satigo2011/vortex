@@ -1,4 +1,11 @@
 const Producto = require("../models/Producto");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 async function listar(req, res) {
   try {
@@ -41,12 +48,22 @@ async function eliminar(req, res) {
 }
 
 
-function subirImagen(req, res) {
+async function subirImagen(req, res) {
   if (!req.file) {
     return res.status(400).json({ mensaje: "No se recibió ninguna imagen" });
   }
-  const base = process.env.PUBLIC_URL || `${req.protocol}://${req.get("host")}`;
-  res.status(201).json({ url: `${base}/uploads/${req.file.filename}` });
+  try {
+    const resultado = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "vortex" },
+        (error, result) => (error ? reject(error) : resolve(result))
+      );
+      stream.end(req.file.buffer);
+    });
+    res.status(201).json({ url: resultado.secure_url });
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al subir imagen", error: error.message });
+  }
 }
 
 module.exports = { listar, crear, actualizar, eliminar, subirImagen };
