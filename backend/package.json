@@ -1,0 +1,28 @@
+{
+  "name": "vortex-backend",
+  "version": "1.0.0",
+  "description": "API REST de Vortex (tienda de ropa) - backend",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^8.3.0",
+    "mongoose": "^8.5.0",
+    "multer": "^2.5.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "allowScripts": {
+    "@scarf/scarf@1.4.0": true
+  }
+}
